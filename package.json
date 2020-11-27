@@ -1,0 +1,26 @@
+{
+  "name": "actions-set-env-vars",
+  "version": "1.0.0",
+  "description": "Action to dynamically set the `.env` file and output common env vars",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sarink-software/actions-set-env-vars.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sarink-software/actions-set-env-vars/issues"
+  },
+  "homepage": "https://github.com/sarink-software/actions-set-env-vars#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.2.0"
+  }
+}
