@@ -1,9 +1,12 @@
 name: Set env vars
 
+inputs:
+  env_file:
+    default: ''
+    required: false
+
 outputs:
   APP_ENV: ${{ steps.app_env.outputs.APP_ENV }}
-  APP_HOST: ${{ steps.app_host.outputs.APP_HOST }}
-  APP_NAME: ${{ steps.app_name.outputs.APP_NAME }}
   NODE_VERSION: ${{ steps.node_version.outputs.NODE_VERSION }}
 
 runs:
@@ -32,8 +35,13 @@ runs:
         fi
         echo "::set-output name=APP_ENV::${APP_ENV}"
 
-    - name: Set .env file
+    - name: Set .env file from APP_ENV
+      if: inputs.env_file == ""
       run: cp -v .env.${{ steps.app_env.outputs.APP_ENV }} .env
+
+    - name: Set .env file from env_file
+      if: inputs.env_file != ""
+      run: cp -v .env.${{ inputs.env_file }} .env
 
     - name: Set env vars
       using: node12

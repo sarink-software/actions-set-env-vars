@@ -15,7 +15,7 @@ NODE_VERSION
 ```
 
 ```
-All values inside .env.${APP_ENV} file
+All values inside .env file
 # Set as key value pairs on the "outputs" of this action
 ```
 
@@ -32,6 +32,10 @@ jobs:
       - name: Set env vars
         id: set-env-vars
         uses: sarink-software/actions-set-env-vars@latest
+        with:
+          # If unset, will be dynamically set to .env.$APP_ENV
+          # Otherwise, choose which file to use:
+          env_file: .env.dev
 
       - name: Setup node
         uses: actions/setup-node@v1
