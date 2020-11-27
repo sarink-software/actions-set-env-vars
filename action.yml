@@ -1,0 +1,40 @@
+name: Set env vars
+
+outputs:
+  APP_ENV: ${{ steps.app_env.outputs.APP_ENV }}
+  APP_HOST: ${{ steps.app_host.outputs.APP_HOST }}
+  APP_NAME: ${{ steps.app_name.outputs.APP_NAME }}
+  NODE_VERSION: ${{ steps.node_version.outputs.NODE_VERSION }}
+
+runs:
+  using: composite
+  steps:
+    - name: Set NODE_VERSION
+      id: node_version
+      run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
+
+    - name: Set APP_ENV
+      id: app_env
+      run: |
+        set -xe
+        declare APP_ENV
+        if [ ${{ github.event_name }} == "release" ] || [ ${{ github.ref }} == "refs/heads/master" ] || [ ${{ github.base_ref }} == "master" ]; then
+          APP_ENV=prod
+        elif [ ${{ github.ref }} == "refs/heads/qa" ] || [ ${{ github.base_ref }} == "qa" ]; then
+          APP_ENV=qa
+        elif [ ${{ github.ref }} == "refs/heads/staging" ] || [ ${{ github.base_ref }} == "staging" ]; then
+          APP_ENV=stage
+        elif [ ${{ github.ref }} == "refs/heads/develop" ] || [ ${{ github.base_ref }} == "develop" ]; then
+          APP_ENV=dev
+        else
+          echo "APP_ENV could not be set with ref=${{ github.ref }}, base_ref=${{ github.base_ref }}, and event_name=${{ github.event_name }}"
+          exit 1
+        fi
+        echo "::set-output name=APP_ENV::${APP_ENV}"
+
+    - name: Set .env file
+      run: cp -v .env.${{ steps.app_env.outputs.APP_ENV }} .env
+
+    - name: Set env vars
+      using: node12
+      main: index.js
