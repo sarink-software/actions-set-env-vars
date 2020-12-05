@@ -23,6 +23,8 @@ runs:
         declare APP_ENV
         if [ ${{ github.event_name }} == "release" ] || [ ${{ github.ref }} == "refs/heads/master" ] || [ ${{ github.base_ref }} == "master" ]; then
           APP_ENV=prod
+        elif [ ${{ github.ref }} == "refs/heads/main" ] || [ ${{ github.base_ref }} == "main" ]; then
+          APP_ENV=prod
         elif [ ${{ github.ref }} == "refs/heads/qa" ] || [ ${{ github.base_ref }} == "qa" ]; then
           APP_ENV=qa
         elif [ ${{ github.ref }} == "refs/heads/staging" ] || [ ${{ github.base_ref }} == "staging" ]; then
