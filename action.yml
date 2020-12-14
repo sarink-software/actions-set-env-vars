@@ -1,51 +1,5 @@
 name: Set env vars
 
-outputs:
-  ENV_FILE:
-    value: ${{ steps.env_file.outputs.ENV_FILE }}
-  NODE_VERSION:
-    value: ${{ steps.node_version.outputs.NODE_VERSION }}
-
 runs:
-  using: composite
-  steps:
-    - name: Set NODE_VERSION
-      id: node_version
-      shell: bash
-      run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
-
-    - name: Set ENV_FILE
-      id: env_file
-      shell: bash
-      run: |
-        set -xe
-        declare ENV_FILE
-        if [ ${{ github.event_name }} == "release" ]; then
-          ENV_FILE=prod
-        elif [ ${{ github.ref }} == "refs/heads/master" ] || [ ${{ github.base_ref }} == "master" ]; then
-          ENV_FILE=prod
-        elif [ ${{ github.ref }} == "refs/heads/main" ] || [ ${{ github.base_ref }} == "main" ]; then
-          ENV_FILE=prod
-        elif [ ${{ github.ref }} == "refs/heads/qa" ] || [ ${{ github.base_ref }} == "qa" ]; then
-          ENV_FILE=qa
-        elif [ ${{ github.ref }} == "refs/heads/stage" ] || [ ${{ github.base_ref }} == "stage" ]; then
-          ENV_FILE=stage
-        elif [ ${{ github.ref }} == "refs/heads/staging" ] || [ ${{ github.base_ref }} == "staging" ]; then
-          ENV_FILE=stage
-        elif [ ${{ github.ref }} == "refs/heads/dev" ] || [ ${{ github.base_ref }} == "dev" ]; then
-          ENV_FILE=dev
-        elif [ ${{ github.ref }} == "refs/heads/develop" ] || [ ${{ github.base_ref }} == "develop" ]; then
-          ENV_FILE=dev
-        else
-          echo "ENV_FILE could not be set with ref=${{ github.ref }}, base_ref=${{ github.base_ref }}, and event_name=${{ github.event_name }}"
-          exit 1
-        fi
-        echo "::set-output name=ENV_FILE::${ENV_FILE}"
-
-    - name: Set .env file
-      shell: bash
-      run: cp -v .env.${{ steps.env_file.outputs.ENV_FILE }} .env
-
-    - name: Set output vars
-      shell: bash
-      run: node ./index.js
+  using: node12
+  main: index.js
