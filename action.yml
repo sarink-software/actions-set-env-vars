@@ -1,13 +1,10 @@
 name: Set env vars
 
-inputs:
-  env_file:
-    default: ''
-    required: false
-
 outputs:
-  ENV_FILE: ${{ steps.env_file.outputs.ENV_FILE }}
-  NODE_VERSION: ${{ steps.node_version.outputs.NODE_VERSION }}
+  ENV_FILE:
+    value: ${{ steps.env_file.outputs.ENV_FILE }}
+  NODE_VERSION:
+    value: ${{ steps.node_version.outputs.NODE_VERSION }}
 
 runs:
   using: composite
@@ -46,14 +43,8 @@ runs:
         echo "::set-output name=ENV_FILE::${ENV_FILE}"
 
     - name: Set .env file
-      if: inputs.env_file == ""
       shell: bash
       run: cp -v .env.${{ steps.env_file.outputs.ENV_FILE }} .env
-
-    - name: Set .env file from env_file
-      if: inputs.env_file != ""
-      shell: bash
-      run: cp -v .env.${{ inputs.env_file }} .env
 
     - name: Set output vars
       using: node12
