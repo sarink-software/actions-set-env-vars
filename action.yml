@@ -47,5 +47,5 @@ runs:
       run: cp -v .env.${{ steps.env_file.outputs.ENV_FILE }} .env
 
     - name: Set output vars
-      using: node12
-      main: index.js
+      shell: bash
+      run: node ./index.js
