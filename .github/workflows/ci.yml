@@ -4,17 +4,26 @@ jobs:
   test-and-build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v1
         with:
           node-version: 12.x
-      - run: |
+
+      - name: Install, build, package
+        run: |
           npm install
           npm run build
           npm run package
           rm -rf node_modules index.js
-      - uses: ./
-      - uses: EndBug/add-and-commit@v5
+
+      - name: Test action
+        uses: ./
+
+      - name: Commit newly built/packaged action
+        uses: EndBug/add-and-commit@v5
         with:
           author_name: github-actions
           message: automated build
