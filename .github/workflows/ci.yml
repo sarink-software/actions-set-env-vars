@@ -24,18 +24,32 @@ jobs:
         uses: ./
 
       - name: Test action outputs NODE_VERSION
-        if: ${{ steps.test.outputs.NODE_VERSION }} == "12.x"
-        run: echo "Successfully read NODE_VERSION"
+        run: |
+          if [ ${{ steps.test.outputs.NODE_VERSION }} != '12.x' ]; then
+            echo 'Error! NODE_VERSION not properly set'
+            echo 'Found: ${{ steps.test.outputs.NODE_VERSION }}'
+            echo 'Expected: 12.x'
+            exit 1
+          else
+            echo 'NODE_VERSION set successfully'
+          fi
 
       - name: Test action outputs APP_ENV
-        if: ${{ steps.test.outputs.APP_ENV }} == "prod"
-        run: echo "Successfully loaded .env.prod and set APP_ENV=prod output"
+        run: |
+          if [ ${{ steps.test.outputs.APP_ENV }} != 'prod' ]; then
+            echo 'Error! APP_ENV not properly set'
+            echo 'Found: ${{ steps.test.outputs.APP_ENV }}'
+            echo 'Expected: prod'
+            exit 1
+          else
+            echo 'APP_ENV set successfully'
+          fi
 
       - name: Commit newly built/packaged action
         uses: EndBug/add-and-commit@v5
         with:
           author_name: github-actions
-          message: automated build
+          message: 'ci: automated build'
           add: dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

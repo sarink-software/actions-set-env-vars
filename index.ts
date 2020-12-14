@@ -34,8 +34,7 @@ try {
     core.info(`Copying .env.${env} --> .env`);
     fs.copyFileSync(`.env.${env}`, '.env');
 
-    const envFile = path.resolve(__dirname, '.env');
-    const dotEnvConfig = dotenv.config({ path: envFile });
+    const dotEnvConfig = dotenv.config();
     const parsedEnvFile = dotEnvConfig.parsed;
     if (dotEnvConfig.error || !parsedEnvFile) throw dotEnvConfig.error;
     Object.entries(parsedEnvFile).forEach(([key, val]) => {
