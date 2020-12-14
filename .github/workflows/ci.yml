@@ -19,8 +19,17 @@ jobs:
           npm run package
           rm -rf node_modules index.js
 
-      - name: Test action
+      - name: Test action runs
+        id: test
         uses: ./
+
+      - name: Test action outputs NODE_VERSION
+        if: ${{ steps.test.outputs.NODE_VERSION }} == "12.x"
+        run: echo "Successfully read NODE_VERSION"
+
+      - name: Test action outputs APP_ENV
+        if: ${{ steps.test.outputs.APP_ENV }} == "prod"
+        run: echo "Successfully loaded .env.prod and set APP_ENV=prod output"
 
       - name: Commit newly built/packaged action
         uses: EndBug/add-and-commit@v5
