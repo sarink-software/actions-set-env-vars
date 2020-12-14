@@ -11,6 +11,7 @@ try {
   const nvmrcExists = fs.existsSync('.nvmrc');
   if (nvmrcExists) {
     const nvmrc = fs.readFileSync('.nvmrc', 'utf-8');
+    core.info(`Found .nvmrc file, setting NODE_VERSION=${nvmrc}`);
     core.setOutput('NODE_VERSION', nvmrc);
   } else {
     core.info('No .nvmrc file found, skipping setting NODE_VERSION output.');
