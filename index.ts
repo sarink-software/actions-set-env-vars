@@ -1,8 +1,9 @@
-import core from '@actions/core';
-import github from '@actions/github';
-import dotenv from 'dotenv';
-import fs from 'fs';
-import path from 'path';
+// Import modules with "* as" https://github.com/vercel/ncc/issues/621
+import * as core from '@actions/core';
+import * as github from '@actions/github';
+import * as dotenv from 'dotenv';
+import * as fs from 'fs';
+import * as path from 'path';
 
 try {
   type Env = 'prod' | 'qa' | 'stage' | 'dev';
