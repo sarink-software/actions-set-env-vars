@@ -11,7 +11,8 @@ try {
   const nvmrcExists = fs.existsSync('.nvmrc');
   if (nvmrcExists) {
     const nvmrc = fs.readFileSync('.nvmrc', 'utf-8');
-    core.info(`Found .nvmrc file, setting NODE_VERSION=${nvmrc}`);
+    core.info('Found .nvmrc file');
+    core.info(`Setting output var: NODE_VERSION=${nvmrc}`);
     core.setOutput('NODE_VERSION', nvmrc);
   } else {
     core.info('No .nvmrc file found, skipping setting NODE_VERSION output.');
@@ -38,7 +39,7 @@ try {
     const parsedEnvFile = dotEnvConfig.parsed;
     if (dotEnvConfig.error || !parsedEnvFile) throw dotEnvConfig.error;
     Object.entries(parsedEnvFile).forEach(([key, val]) => {
-      core.info(`Setting ${key}=*******`);
+      core.info(`Setting output var: ${key}=******`);
       core.setOutput(key, val);
     });
   } else {
