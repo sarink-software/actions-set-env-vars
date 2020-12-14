@@ -6,7 +6,7 @@ inputs:
     required: false
 
 outputs:
-  APP_ENV: ${{ steps.app_env.outputs.APP_ENV }}
+  ENV_FILE: ${{ steps.env_file.outputs.ENV_FILE }}
   NODE_VERSION: ${{ steps.node_version.outputs.NODE_VERSION }}
 
 runs:
@@ -16,35 +16,41 @@ runs:
       id: node_version
       run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
 
-    - name: Set APP_ENV
-      id: app_env
+    - name: Set ENV_FILE
+      id: env_file
       run: |
         set -xe
-        declare APP_ENV
-        if [ ${{ github.event_name }} == "release" ] || [ ${{ github.ref }} == "refs/heads/master" ] || [ ${{ github.base_ref }} == "master" ]; then
-          APP_ENV=prod
+        declare ENV_FILE
+        if [ ${{ github.event_name }} == "release" ]; then
+          ENV_FILE=prod
+        elif [ ${{ github.ref }} == "refs/heads/master" ] || [ ${{ github.base_ref }} == "master" ]; then
+          ENV_FILE=prod
         elif [ ${{ github.ref }} == "refs/heads/main" ] || [ ${{ github.base_ref }} == "main" ]; then
-          APP_ENV=prod
+          ENV_FILE=prod
         elif [ ${{ github.ref }} == "refs/heads/qa" ] || [ ${{ github.base_ref }} == "qa" ]; then
-          APP_ENV=qa
+          ENV_FILE=qa
+        elif [ ${{ github.ref }} == "refs/heads/stage" ] || [ ${{ github.base_ref }} == "stage" ]; then
+          ENV_FILE=stage
         elif [ ${{ github.ref }} == "refs/heads/staging" ] || [ ${{ github.base_ref }} == "staging" ]; then
-          APP_ENV=stage
+          ENV_FILE=stage
+        elif [ ${{ github.ref }} == "refs/heads/dev" ] || [ ${{ github.base_ref }} == "dev" ]; then
+          ENV_FILE=dev
         elif [ ${{ github.ref }} == "refs/heads/develop" ] || [ ${{ github.base_ref }} == "develop" ]; then
-          APP_ENV=dev
+          ENV_FILE=dev
         else
-          echo "APP_ENV could not be set with ref=${{ github.ref }}, base_ref=${{ github.base_ref }}, and event_name=${{ github.event_name }}"
+          echo "ENV_FILE could not be set with ref=${{ github.ref }}, base_ref=${{ github.base_ref }}, and event_name=${{ github.event_name }}"
           exit 1
         fi
-        echo "::set-output name=APP_ENV::${APP_ENV}"
+        echo "::set-output name=ENV_FILE::${ENV_FILE}"
 
-    - name: Set .env file from APP_ENV
+    - name: Set .env file
       if: inputs.env_file == ""
-      run: cp -v .env.${{ steps.app_env.outputs.APP_ENV }} .env
+      run: cp -v .env.${{ steps.env_file.outputs.ENV_FILE }} .env
 
     - name: Set .env file from env_file
       if: inputs.env_file != ""
       run: cp -v .env.${{ inputs.env_file }} .env
 
-    - name: Set env vars
+    - name: Set output vars
       using: node12
       main: index.js
