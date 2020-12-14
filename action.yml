@@ -14,10 +14,12 @@ runs:
   steps:
     - name: Set NODE_VERSION
       id: node_version
+      shell: bash
       run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
 
     - name: Set ENV_FILE
       id: env_file
+      shell: bash
       run: |
         set -xe
         declare ENV_FILE
@@ -45,10 +47,12 @@ runs:
 
     - name: Set .env file
       if: inputs.env_file == ""
+      shell: bash
       run: cp -v .env.${{ steps.env_file.outputs.ENV_FILE }} .env
 
     - name: Set .env file from env_file
       if: inputs.env_file != ""
+      shell: bash
       run: cp -v .env.${{ inputs.env_file }} .env
 
     - name: Set output vars
