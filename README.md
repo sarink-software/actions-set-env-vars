@@ -31,11 +31,7 @@ jobs:
 
       - name: Set env vars
         id: set-env-vars
-        uses: sarink-software/actions-set-env-vars@latest
-        with:
-          # If unset, will be dynamically set to .env.$APP_ENV
-          # Otherwise, choose which file to use:
-          env_file: .env.dev
+        uses: sarink-software/actions-set-env-vars@main
 
       - name: Setup node
         uses: actions/setup-node@v1
