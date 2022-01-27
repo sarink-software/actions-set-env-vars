@@ -1,5 +1,9 @@
 name: Set .env and vars
 
+inputs:
+  env-file:
+    required: false
+
 runs:
   using: node12
   main: dist/index.js

@@ -19,6 +19,11 @@ All values inside .env file
 # Set as key value pairs on the "outputs" of this action
 ```
 
+## Inputs
+
+`env-file`: Optional. Manually override and specify which env file
+should be used, regardless of branch name.
+
 ## Usage
 
 ```
