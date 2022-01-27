@@ -29,7 +29,7 @@ try {
     develop: 'dev',
   };
 
-  const overrideEnv = core.getInput('env-file');
+  const overrideEnv = core.getInput('env');
   const env = overrideEnv ? overrideEnv : eventName === 'release' ? 'prod' : refToEnv[ref];
   const envExists = env && fs.existsSync(`.env.${env}`);
 

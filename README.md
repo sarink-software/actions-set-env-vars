@@ -21,8 +21,7 @@ All values inside .env file
 
 ## Inputs
 
-`env-file`: Optional. Manually override and specify which env file
-should be used, regardless of branch name.
+`env`: Optional. Manually specify which env to use
 
 ## Usage
 

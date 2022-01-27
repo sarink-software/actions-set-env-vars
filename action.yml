@@ -1,7 +1,7 @@
 name: Set .env and vars
 
 inputs:
-  env-file:
+  env:
     required: false
 
 runs:

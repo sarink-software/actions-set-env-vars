@@ -34,7 +34,7 @@ jobs:
             echo 'NODE_VERSION set successfully'
           fi
 
-      - name: Test action outputs APP_ENV
+      - name: Test action outputs correct APP_ENV
         run: |
           if [ ${{ steps.test.outputs.APP_ENV }} != 'prod' ]; then
             echo 'Error! APP_ENV not properly set'
@@ -49,9 +49,9 @@ jobs:
         id: test-input
         uses: ./
         with:
-          env-file: input
+          env: input
 
-      - name: Test action with input outputs APP_ENV
+      - name: Test action with input outputs correct APP_ENV
         run: |
           if [ ${{ steps.test-input.outputs.APP_ENV }} != 'input' ]; then
             echo 'Error! APP_ENV not properly set'
