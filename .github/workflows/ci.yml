@@ -45,6 +45,23 @@ jobs:
             echo 'APP_ENV set successfully'
           fi
 
+      - name: Test action runs with env-file input
+        id: test-input
+        uses: ./
+        with:
+          env-file: input
+
+      - name: Test action with input outputs APP_ENV
+        run: |
+          if [ ${{ steps.test-input.outputs.APP_ENV }} != 'input' ]; then
+            echo 'Error! APP_ENV not properly set'
+            echo 'Found: ${{ steps.test-input.outputs.APP_ENV }}'
+            echo 'Expected: input'
+            exit 1
+          else
+            echo 'APP_ENV set successfully'
+          fi
+
       - name: Commit newly built/packaged action
         uses: EndBug/add-and-commit@v5
         with:
